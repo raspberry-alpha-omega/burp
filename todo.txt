@@ -4,7 +4,6 @@ Current
 
 Sooner
 ------
-* enter decimal fraction into MM57109 working register
 * enter exponent into MM57109 working register
 * basic math ops
 * inverted math ops
@@ -23,3 +22,4 @@ Done
 2016-05-30 readme
 2016-05-30 enter integer into MM57109 working register
 2016-05-30 first tests for integer mode
+2016-05-30 enter decimal fraction into MM57109 working register
