@@ -12,7 +12,7 @@ This Project
 
 The intention of this project is to build enough of a simulator to run the few remaining published programs for this language, and to allow experimentation with new ones, even on very limited (by modern standards) hardware. To achieve this, the project consists of several phases.
 
-Phase 1
+Phase 1 (in progress)
 -------
 
 Build a simulator for the MM57109 Number-Oriented Processor in C, together with a suite of unit tests. The key here is to prove that it works and that I understand all the ins and outs of how it should work. No particular emphasis on code size or speed.
