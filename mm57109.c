@@ -111,10 +111,10 @@ void mm57109_op(struct MM57109* mm, uint8_t op) {
 		mm->m = tmp;
 	} break;
 	case OP_MS:
-		//TODO
+		mm->m = mm->x;
 	break;
 	case OP_MR:
-		//TODO
+		mm57109_push(mm, mm57109_get_register(&mm->m));
 	break;
 	case OP_LSH:
 		//TODO
@@ -232,7 +232,7 @@ void mm57109_op(struct MM57109* mm, uint8_t op) {
 		//TODO
 	break;
 	case OP_NOP:
-		//TODO
+		// it's a NOP, so do nothing!
 	break;
 
 	}

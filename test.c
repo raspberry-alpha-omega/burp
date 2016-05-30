@@ -168,6 +168,49 @@ START_TEST(test_xem)
 }
 END_TEST
 
+START_TEST(test_ms)
+{
+	struct MM57109 mm;
+	mm57109_init(&mm);
+
+    mm57109_op(&mm, OP_1);
+    assert_register(&mm.x, 1);
+    assert_register(&mm.m, 0);
+
+    mm57109_op(&mm, OP_MS);
+    assert_register(&mm.x, 1);
+    assert_register(&mm.m, 1);
+}
+END_TEST
+
+START_TEST(test_mr)
+{
+	struct MM57109 mm;
+	mm57109_init(&mm);
+
+    mm57109_op(&mm, OP_1);
+    mm57109_op(&mm, OP_EN);
+    mm57109_op(&mm, OP_2);
+    mm57109_op(&mm, OP_EN);
+    mm57109_op(&mm, OP_3);
+    mm57109_op(&mm, OP_EN);
+    mm57109_op(&mm, OP_4);
+    mm57109_set_register(&mm.m, 5);
+    assert_register(&mm.x, 4);
+    assert_register(&mm.y, 3);
+    assert_register(&mm.z, 2);
+    assert_register(&mm.t, 1);
+    assert_register(&mm.m, 5);
+
+    mm57109_op(&mm, OP_MR);
+    assert_register(&mm.x, 5);
+    assert_register(&mm.y, 4);
+    assert_register(&mm.z, 3);
+    assert_register(&mm.t, 2);
+    assert_register(&mm.m, 5);
+}
+END_TEST
+
 void build_suite(TCase* tc) {
     tcase_add_test(tc, test_single_digit);
     tcase_add_test(tc, test_multiple_digit);
@@ -177,6 +220,8 @@ void build_suite(TCase* tc) {
     tcase_add_test(tc, test_roll);
     tcase_add_test(tc, test_xey);
     tcase_add_test(tc, test_xem);
+    tcase_add_test(tc, test_ms);
+    tcase_add_test(tc, test_mr);
 }
 
 int main(void)

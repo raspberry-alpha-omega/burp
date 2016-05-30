@@ -6,6 +6,6 @@ test: test.c burp.c mm57109.c
 	gcc -o test mm57109.c burp.c test.c -lcheck -lm -lpthread -lrt
 
 clean:
-	rm -f *.o burp
+	rm -f *.o burp test
 
 all: burp test
