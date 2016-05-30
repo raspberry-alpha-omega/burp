@@ -8,6 +8,7 @@ void mm57109_init(struct MM57109* mm) {
 	mm57109_set_register(&mm->y, 0);
 	mm57109_set_register(&mm->t, 0);
 	mm57109_set_register(&mm->m, 0);
+	mm->dp = 1;
 }
 
 void mm57109_set_register(struct MM57109_register* reg, float value) {
@@ -34,7 +35,8 @@ void mm57109_op(struct MM57109* mm, uint8_t op) {
 			mm57109_set_register(&mm->x, (mm57109_get_register(&mm->x) * 10) + op);
 		break;
 		case decimal_entry:
-			//TODO track divisor and add to X
+			mm->dp /= 10;
+			mm57109_set_register(&mm->x, mm57109_get_register(&mm->x) + (op * mm->dp));
 		break;
 		case exponent_entry:
 			//TODO track exponent and scale value
@@ -123,6 +125,7 @@ void mm57109_op(struct MM57109* mm, uint8_t op) {
 	break;
 	case OP_EN:
 		mm57109_push(mm, 0);
+		mm->state = normal;
 	break;
 	case OP_TOGM:
 		//TODO

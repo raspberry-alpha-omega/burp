@@ -17,6 +17,7 @@ struct MM57109 {
 	struct MM57109_register t;
 	struct MM57109_register m;
 	enum MM57109_state state;
+	float dp;
 };
 
 // generic: NOP, HALT, MCLR, ECLR
