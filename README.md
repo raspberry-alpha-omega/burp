@@ -10,7 +10,7 @@ Significant features of the language include a fixed set of 26 numeric variables
 This Project
 ------------
 
-The intention of this project is to build enough of a simulator to run the few remaining punlished programs for this language, and to allow experimentation with new ones, even on very limited (by modern standards) hardware. To achieve this, the project consists of several phases.
+The intention of this project is to build enough of a simulator to run the few remaining published programs for this language, and to allow experimentation with new ones, even on very limited (by modern standards) hardware. To achieve this, the project consists of several phases.
 
 Phase 1
 -------
