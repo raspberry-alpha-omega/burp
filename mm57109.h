@@ -8,7 +8,7 @@ struct MM57109_register {
 	double value;
 };
 
-enum MM57109_state { halt, integer_entry, decimal_entry, invert };
+enum MM57109_state { normal, integer_entry, decimal_entry, exponent_entry, invert };
 
 struct MM57109 {
 	struct MM57109_register x;
