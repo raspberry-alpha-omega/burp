@@ -18,13 +18,20 @@ float mm57109_get_register(struct MM57109_register* reg) {
 	return reg->value;
 }
 
+void mm57109_push(struct MM57109* mm, float value) {
+	mm->t = mm->z;
+	mm->z = mm->y;
+	mm->y = mm->x;
+	mm57109_set_register(&mm->x, value);
+}
+
 void mm57109_op(struct MM57109* mm, uint8_t op) {
 	switch(op) {
 
 	case OP_0: case OP_1: case OP_2: case OP_3: case OP_4: case OP_5: case OP_6: case OP_7: case OP_8: case OP_9:
 		switch(mm->state) {
 		case integer_entry:
-			mm57109_set_register(&mm->x, mm57109_get_register(&mm->x) * 10 + op);
+			mm57109_set_register(&mm->x, (mm57109_get_register(&mm->x) * 10) + op);
 		break;
 		case decimal_entry:
 			//TODO track divisor and add to X
@@ -114,8 +121,8 @@ void mm57109_op(struct MM57109* mm, uint8_t op) {
 	case OP_INV:
 		//TODO
 	break;
-	case OP_EM:
-		//TODO
+	case OP_EN:
+		mm57109_push(mm, 0);
 	break;
 	case OP_TOGM:
 		//TODO

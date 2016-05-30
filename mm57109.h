@@ -20,8 +20,8 @@ struct MM57109 {
 };
 
 // generic: NOP, HALT, MCLR, ECLR
-// digit entry: 0,1,2,3,4,5,6,7,8,9,DP,EE,CS,PI,EN
-// stack: ROLL,POP,XEY,XEM,MS,MR,MSH,LSH
+// digit entry: 0,1,2,3,4,5,6,7,8,9,DP,EE,CS,PI
+// stack: ROLL,EN,POP,XEY,XEM,MS,MR,MSH,LSH
 // math(X,Y): +,-,*,/
 // math(X,M): inv+, inv-, inv*,inv/
 // math(X): 1/x,sqrt,sq,10x,ex,ln,log
@@ -34,7 +34,7 @@ struct MM57109 {
 /* opcode table from datasheet:
       00      01      10      11
 0000  0       TJC     INV     XEY
-0001  1       TX0     EM      EX
+0001  1       TX0     EN      EX
 0010  2       TXLT0   TOGM    10X
 0011  3       TXF     ROLL    SQ
 0100  4       TERR    SIN (-) SQRT
@@ -86,7 +86,7 @@ struct MM57109 {
 #define OP_RSH   0b011111
 
 #define OP_INV   0b100000
-#define OP_EM    0b100001
+#define OP_EN    0b100001
 #define OP_TOGM  0b100010
 #define OP_ROLL  0b100011
 #define OP_SIN   0b100100
@@ -121,6 +121,7 @@ struct MM57109 {
 
 void mm57109_init(struct MM57109* mm);
 void mm57109_set_register(struct MM57109_register* reg, float value);
+float mm57109_get_register(struct MM57109_register* reg);
 
 void mm57109_op(struct MM57109* mm, uint8_t op);
 

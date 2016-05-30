@@ -1,12 +1,13 @@
 Current
 -------
 * flesh out opcode handler and NOP register/state model
-* tests for integer mode
 
 Sooner
 ------
 * enter decimal fraction into MM57109 working register
 * enter exponent into MM57109 working register
+* basic math ops
+* inverted math ops
 * stack ops 
 
 Later
@@ -21,3 +22,4 @@ Done
 2016-05-30 basic makefile
 2016-05-30 readme
 2016-05-30 enter integer into MM57109 working register
+2016-05-30 first tests for integer mode
