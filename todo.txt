@@ -1,13 +1,13 @@
 Current
 -------
 * flesh out opcode handler and NOP register/state model
+* stack ops
 
 Sooner
 ------
 * enter exponent into MM57109 working register
 * basic math ops
 * inverted math ops
-* stack ops 
 
 Later
 -----

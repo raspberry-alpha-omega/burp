@@ -80,11 +80,103 @@ START_TEST(test_digits_and_decimals)
 }
 END_TEST
 
+START_TEST(test_pop)
+{
+	struct MM57109 mm;
+	mm57109_init(&mm);
+
+    mm57109_op(&mm, OP_1);
+    mm57109_op(&mm, OP_EN);
+    mm57109_op(&mm, OP_2);
+    mm57109_op(&mm, OP_EN);
+    mm57109_op(&mm, OP_3);
+    mm57109_op(&mm, OP_EN);
+    mm57109_op(&mm, OP_4);
+    assert_register(&mm.x, 4);
+    assert_register(&mm.y, 3);
+    assert_register(&mm.z, 2);
+    assert_register(&mm.t, 1);
+
+    mm57109_op(&mm, OP_POP);
+    assert_register(&mm.x, 3);
+    assert_register(&mm.y, 2);
+    assert_register(&mm.z, 1);
+    assert_register(&mm.t, 0);
+}
+END_TEST
+
+START_TEST(test_roll)
+{
+	struct MM57109 mm;
+	mm57109_init(&mm);
+
+    mm57109_op(&mm, OP_1);
+    mm57109_op(&mm, OP_EN);
+    mm57109_op(&mm, OP_2);
+    mm57109_op(&mm, OP_EN);
+    mm57109_op(&mm, OP_3);
+    mm57109_op(&mm, OP_EN);
+    mm57109_op(&mm, OP_4);
+    assert_register(&mm.x, 4);
+    assert_register(&mm.y, 3);
+    assert_register(&mm.z, 2);
+    assert_register(&mm.t, 1);
+
+    mm57109_op(&mm, OP_ROLL);
+    assert_register(&mm.x, 3);
+    assert_register(&mm.y, 2);
+    assert_register(&mm.z, 1);
+    assert_register(&mm.t, 4);
+}
+END_TEST
+
+START_TEST(test_xey)
+{
+	struct MM57109 mm;
+	mm57109_init(&mm);
+
+    mm57109_op(&mm, OP_1);
+    assert_register(&mm.x, 1);
+    assert_register(&mm.y, 0);
+
+    mm57109_op(&mm, OP_XEY);
+    assert_register(&mm.x, 0);
+    assert_register(&mm.y, 1);
+
+    mm57109_op(&mm, OP_XEY);
+    assert_register(&mm.x, 1);
+    assert_register(&mm.y, 0);
+}
+END_TEST
+
+START_TEST(test_xem)
+{
+	struct MM57109 mm;
+	mm57109_init(&mm);
+
+    mm57109_op(&mm, OP_1);
+    assert_register(&mm.x, 1);
+    assert_register(&mm.m, 0);
+
+    mm57109_op(&mm, OP_XEM);
+    assert_register(&mm.x, 0);
+    assert_register(&mm.m, 1);
+
+    mm57109_op(&mm, OP_XEM);
+    assert_register(&mm.x, 1);
+    assert_register(&mm.m, 0);
+}
+END_TEST
+
 void build_suite(TCase* tc) {
     tcase_add_test(tc, test_single_digit);
     tcase_add_test(tc, test_multiple_digit);
     tcase_add_test(tc, test_digits_and_enter);
     tcase_add_test(tc, test_digits_and_decimals);
+    tcase_add_test(tc, test_pop);
+    tcase_add_test(tc, test_roll);
+    tcase_add_test(tc, test_xey);
+    tcase_add_test(tc, test_xem);
 }
 
 int main(void)

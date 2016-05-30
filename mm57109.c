@@ -104,9 +104,12 @@ void mm57109_op(struct MM57109* mm, uint8_t op) {
 	case OP_DBNZ:
 		//TODO
 	break;
-	case OP_XEM:
-		//TODO
-	break;
+	case OP_XEM: {
+		struct MM57109_register tmp;
+		tmp = mm->x;
+		mm->x = mm->m;
+		mm->m = tmp;
+	} break;
 	case OP_MS:
 		//TODO
 	break;
@@ -130,9 +133,15 @@ void mm57109_op(struct MM57109* mm, uint8_t op) {
 	case OP_TOGM:
 		//TODO
 	break;
-	case OP_ROLL:
-		//TODO
-	break;
+	case OP_ROLL: {
+		struct MM57109_register tmp;
+		tmp = mm->t;
+		mm->t = mm->x;
+		mm->x = mm->y;
+		mm->y = mm->z;
+		mm->z = tmp;
+		mm->state = normal;
+	} break;
 	case OP_SIN:
 		//TODO
 	break;
@@ -164,15 +173,22 @@ void mm57109_op(struct MM57109* mm, uint8_t op) {
 		//TODO
 	break;
 	case OP_POP:
-		//TODO
+		mm->x = mm->y;
+		mm->y = mm->z;
+		mm->z = mm->t;
+		mm57109_set_register(&mm->t, 0);
+		mm->state = normal;
 	break;
 	case OP_MCLR:
 		//TODO
 	break;
 
-	case OP_XEY:
-		//TODO
-	break;
+	case OP_XEY:{
+		struct MM57109_register tmp;
+		tmp = mm->x;
+		mm->x = mm->y;
+		mm->y = tmp;
+	} break;
 	case OP_EX:
 		//TODO
 	break;
