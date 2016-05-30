@@ -1,7 +1,7 @@
 BURP
 ====
 
-BURP (Basic Using Reverse Polish) is an odd niche programing language from the late 1970s which was used as the system language of the little-known "Powetran Psi-Comp 80" kit-built home computer. On the surface it appears a bit like a fairly limited early BASIC, but it uses RPN instead of the traditional infix notation for expressions.
+BURP (Basic Using Reverse Polish) is an odd niche programing language from the late 1970s which was used as the system language of the little-known "Powertran Psi-Comp 80" kit-built home computer. On the surface it appears a bit like a fairly limited early BASIC, but it uses RPN instead of the traditional infix notation for expressions.
 
 BURP was designed for a specific machine architecture which used both a general-purpose miccroprocessor (Zilog Z80) with a specialist "Number-Oriented Processor" (National Semiconductor MM57109) to handle all the maths. The constraints of the MM57109, which was essentially a dedicated calculator chip with a 4-bit microcontroller interface bus, strongly affected the design of the language.
 
