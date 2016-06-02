@@ -26,6 +26,15 @@ void mm57109_push(struct MM57109* mm, float value) {
 	mm57109_set_register(&mm->x, value);
 }
 
+float mm57109_pop(struct MM57109* mm) {
+	float ret = mm57109_get_register(&mm->x);
+	mm->x = mm->y;
+	mm->y = mm->z;
+	mm->z = mm->t;
+	mm57109_set_register(&mm->t, 0);
+	return ret;
+}
+
 void mm57109_op(struct MM57109* mm, uint8_t op) {
 	switch(op) {
 
@@ -213,9 +222,11 @@ void mm57109_op(struct MM57109* mm, uint8_t op) {
 	case OP_YX:
 		//TODO
 	break;
-	case OP_PLUS:
-		//TODO
-	break;
+	case OP_PLUS: {
+		float x = mm57109_pop(mm);
+		float y = mm57109_pop(mm);
+		mm57109_push(mm, x + y);
+	} break;
 	case OP_MINUS:
 		//TODO
 	break;
