@@ -240,6 +240,35 @@ START_TEST(test_plus)
 }
 END_TEST
 
+START_TEST(test_minus)
+{
+	struct MM57109 mm;
+	mm57109_init(&mm);
+
+    mm57109_op(&mm, OP_1);
+    mm57109_op(&mm, OP_EN);
+    mm57109_op(&mm, OP_2);
+    mm57109_op(&mm, OP_EN);
+    mm57109_op(&mm, OP_3);
+
+    assert_register(&mm.x, 3);
+    assert_register(&mm.y, 2);
+    assert_register(&mm.z, 1);
+
+    mm57109_op(&mm, OP_MINUS);
+
+    assert_register(&mm.x, 1);
+    assert_register(&mm.y, 1);
+    assert_register(&mm.z, 0);
+
+    mm57109_op(&mm, OP_MINUS);
+
+    assert_register(&mm.x, 0);
+    assert_register(&mm.y, 0);
+    assert_register(&mm.z, 0);
+}
+END_TEST
+
 void build_suite(TCase* tc) {
     tcase_add_test(tc, test_single_digit);
     tcase_add_test(tc, test_multiple_digit);
@@ -252,6 +281,7 @@ void build_suite(TCase* tc) {
     tcase_add_test(tc, test_ms);
     tcase_add_test(tc, test_mr);
     tcase_add_test(tc, test_plus);
+    tcase_add_test(tc, test_minus);
 }
 
 int main(void)
