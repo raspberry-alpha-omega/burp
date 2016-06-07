@@ -133,7 +133,7 @@ void mm57109_op(struct MM57109* mm, uint8_t op) {
 	break;
 
 	case OP_INV:
-		//TODO
+		mm->state = (mm->state == invert) ? normal : invert;
 	break;
 	case OP_EN:
 		mm57109_push(mm, 0);
