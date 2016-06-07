@@ -69,9 +69,11 @@ void mm57109_op(struct MM57109* mm, uint8_t op) {
 	break;
 	case OP_CS:
 		mm57109_set_register(&mm->x, -mm57109_get_register(&mm->x));
+		mm->state = normal;
 	break;
 	case OP_PI:
 		mm57109_set_register(&mm->x, M_PI);
+		mm->state = normal;
 	break;
 	case OP_AIN:
 		//TODO not quite sure what this is about
@@ -118,12 +120,15 @@ void mm57109_op(struct MM57109* mm, uint8_t op) {
 		tmp = mm->x;
 		mm->x = mm->m;
 		mm->m = tmp;
+		mm->state = normal;
 	} break;
 	case OP_MS:
 		mm->m = mm->x;
+		mm->state = normal;
 	break;
 	case OP_MR:
 		mm57109_push(mm, mm57109_get_register(&mm->m));
+		mm->state = normal;
 	break;
 	case OP_LSH:
 		//TODO
@@ -197,6 +202,7 @@ void mm57109_op(struct MM57109* mm, uint8_t op) {
 		tmp = mm->x;
 		mm->x = mm->y;
 		mm->y = tmp;
+		mm->state = normal;
 	} break;
 	case OP_EX:
 		//TODO
@@ -222,26 +228,54 @@ void mm57109_op(struct MM57109* mm, uint8_t op) {
 	case OP_YX:
 		//TODO
 	break;
-	case OP_PLUS: {
-		float x = mm57109_pop(mm);
-		float y = mm57109_pop(mm);
-		mm57109_push(mm, x + y);
-	} break;
-	case OP_MINUS: {
-		float x = mm57109_pop(mm);
-		float y = mm57109_pop(mm);
-		mm57109_push(mm, x - y);
-	} break;
-	case OP_MUL: {
-		float x = mm57109_pop(mm);
-		float y = mm57109_pop(mm);
-		mm57109_push(mm, x * y);
-	} break;
-	case OP_DIV: {
-		float x = mm57109_pop(mm);
-		float y = mm57109_pop(mm);
-		mm57109_push(mm, x / y);
-	} break;
+	case OP_PLUS:
+		if (mm->state == invert) {
+			float x = mm57109_pop(mm);
+			float m = mm57109_get_register(&mm->m);
+			mm57109_set_register(&mm->m, m + x);
+		} else {
+			float x = mm57109_pop(mm);
+			float y = mm57109_pop(mm);
+			mm57109_push(mm, x + y);
+		}
+		mm->state = normal;
+	break;
+	case OP_MINUS:
+		if (mm->state == invert) {
+			float x = mm57109_pop(mm);
+			float m = mm57109_get_register(&mm->m);
+			mm57109_set_register(&mm->m, m - x);
+		} else {
+			float x = mm57109_pop(mm);
+			float y = mm57109_pop(mm);
+			mm57109_push(mm, x - y);
+		}
+		mm->state = normal;
+	break;
+	case OP_MUL:
+		if (mm->state == invert) {
+			float x = mm57109_pop(mm);
+			float m = mm57109_get_register(&mm->m);
+			mm57109_set_register(&mm->m, m * x);
+		} else {
+			float x = mm57109_pop(mm);
+			float y = mm57109_pop(mm);
+			mm57109_push(mm, x * y);
+		}
+		mm->state = normal;
+	break;
+	case OP_DIV:
+		if (mm->state == invert) {
+			float x = mm57109_pop(mm);
+			float m = mm57109_get_register(&mm->m);
+			mm57109_set_register(&mm->m, m / x);
+		} else {
+			float x = mm57109_pop(mm);
+			float y = mm57109_pop(mm);
+			mm57109_push(mm, x / y);
+		}
+		mm->state = normal;
+	break;
 	case OP_PRW1:
 		//TODO
 	break;

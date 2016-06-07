@@ -347,6 +347,68 @@ START_TEST(test_inv)
 }
 END_TEST
 
+START_TEST(test_inv_plus)
+{
+	struct MM57109 mm;
+	mm57109_init(&mm);
+
+    mm57109_op(&mm, OP_1);
+    mm57109_op(&mm, OP_MS);
+    assert_register(&mm.m, 1);
+    mm57109_op(&mm, OP_INV);
+    mm57109_op(&mm, OP_PLUS);
+    assert_register(&mm.m, 2);
+}
+END_TEST
+
+START_TEST(test_inv_minus)
+{
+	struct MM57109 mm;
+	mm57109_init(&mm);
+
+    mm57109_op(&mm, OP_7);
+    mm57109_op(&mm, OP_MS);
+    assert_register(&mm.m, 7);
+    mm57109_op(&mm, OP_2);
+    assert_register(&mm.x, 2);
+    mm57109_op(&mm, OP_INV);
+    mm57109_op(&mm, OP_MINUS);
+    assert_register(&mm.m, 5);
+}
+END_TEST
+
+START_TEST(test_inv_mul)
+{
+	struct MM57109 mm;
+	mm57109_init(&mm);
+
+    mm57109_op(&mm, OP_7);
+    mm57109_op(&mm, OP_MS);
+    assert_register(&mm.m, 7);
+    mm57109_op(&mm, OP_2);
+    assert_register(&mm.x, 2);
+    mm57109_op(&mm, OP_INV);
+    mm57109_op(&mm, OP_MUL);
+    assert_register(&mm.m, 14);
+}
+END_TEST
+
+START_TEST(test_inv_div)
+{
+	struct MM57109 mm;
+	mm57109_init(&mm);
+
+    mm57109_op(&mm, OP_7);
+    mm57109_op(&mm, OP_MS);
+    assert_register(&mm.m, 7);
+    mm57109_op(&mm, OP_2);
+    assert_register(&mm.x, 2);
+    mm57109_op(&mm, OP_INV);
+    mm57109_op(&mm, OP_DIV);
+    assert_register(&mm.m, 3.5);
+}
+END_TEST
+
 void build_suite(TCase* tc) {
     tcase_add_test(tc, test_single_digit);
     tcase_add_test(tc, test_multiple_digit);
@@ -363,6 +425,10 @@ void build_suite(TCase* tc) {
     tcase_add_test(tc, test_mul);
     tcase_add_test(tc, test_div);
     tcase_add_test(tc, test_inv);
+    tcase_add_test(tc, test_inv_plus);
+    tcase_add_test(tc, test_inv_minus);
+    tcase_add_test(tc, test_inv_mul);
+    tcase_add_test(tc, test_inv_div);
 }
 
 int main(void)
