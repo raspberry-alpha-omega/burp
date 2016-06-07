@@ -13,9 +13,11 @@ int same_float(float a, float b) {
 	return strcmp(float_a, float_b) == 0;
 }
 
-void assert_register(struct MM57109_register* reg, float value) {
-    ck_assert(same_float(mm57109_get_register(reg), value));
+void _assert_register(struct MM57109_register* reg, float value, int line) {
+	float rvalue = mm57109_get_register(reg);
+    ck_assert_msg(same_float(rvalue, value), "line %d: expected %f but was %f", line, value, rvalue);
 }
+#define assert_register(reg,value) _assert_register(reg,value,__LINE__)
 
 void assert_state(struct MM57109* mm, enum MM57109_state state) {
     ck_assert_int_eq(mm->state, state);
@@ -298,6 +300,35 @@ START_TEST(test_mul)
 }
 END_TEST
 
+START_TEST(test_div)
+{
+	struct MM57109 mm;
+	mm57109_init(&mm);
+
+    mm57109_op(&mm, OP_1);
+    mm57109_op(&mm, OP_EN);
+    mm57109_op(&mm, OP_2);
+    mm57109_op(&mm, OP_EN);
+    mm57109_op(&mm, OP_3);
+
+    assert_register(&mm.x, 3);
+    assert_register(&mm.y, 2);
+    assert_register(&mm.z, 1);
+
+    mm57109_op(&mm, OP_DIV);
+
+    assert_register(&mm.x, 1.5);
+    assert_register(&mm.y, 1);
+    assert_register(&mm.z, 0);
+
+    mm57109_op(&mm, OP_DIV);
+
+    assert_register(&mm.x, 1.5);
+    assert_register(&mm.y, 0);
+    assert_register(&mm.z, 0);
+}
+END_TEST
+
 void build_suite(TCase* tc) {
     tcase_add_test(tc, test_single_digit);
     tcase_add_test(tc, test_multiple_digit);
@@ -312,6 +343,7 @@ void build_suite(TCase* tc) {
     tcase_add_test(tc, test_plus);
     tcase_add_test(tc, test_minus);
     tcase_add_test(tc, test_mul);
+    tcase_add_test(tc, test_div);
 }
 
 int main(void)

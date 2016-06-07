@@ -237,9 +237,11 @@ void mm57109_op(struct MM57109* mm, uint8_t op) {
 		float y = mm57109_pop(mm);
 		mm57109_push(mm, x * y);
 	} break;
-	case OP_DIV:
-		//TODO
-	break;
+	case OP_DIV: {
+		float x = mm57109_pop(mm);
+		float y = mm57109_pop(mm);
+		mm57109_push(mm, x / y);
+	} break;
 	case OP_PRW1:
 		//TODO
 	break;
