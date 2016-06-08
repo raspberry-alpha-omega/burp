@@ -420,6 +420,28 @@ START_TEST(test_1_x)
 }
 END_TEST
 
+START_TEST(test_sq)
+{
+	struct MM57109 mm;
+	mm57109_init(&mm);
+
+    mm57109_op(&mm, OP_2);
+    mm57109_op(&mm, OP_SQ);
+    assert_register(&mm.x, 4);
+}
+END_TEST
+
+START_TEST(test_sqrt)
+{
+	struct MM57109 mm;
+	mm57109_init(&mm);
+
+    mm57109_op(&mm, OP_9);
+    mm57109_op(&mm, OP_SQRT);
+    assert_register(&mm.x, 3);
+}
+END_TEST
+
 void build_suite(TCase* tc) {
     tcase_add_test(tc, test_single_digit);
     tcase_add_test(tc, test_multiple_digit);
@@ -441,6 +463,8 @@ void build_suite(TCase* tc) {
     tcase_add_test(tc, test_inv_mul);
     tcase_add_test(tc, test_inv_div);
     tcase_add_test(tc, test_1_x);
+    tcase_add_test(tc, test_sq);
+    tcase_add_test(tc, test_sqrt);
 }
 
 int main(void)

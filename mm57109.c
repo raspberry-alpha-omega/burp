@@ -210,12 +210,14 @@ void mm57109_op(struct MM57109* mm, uint8_t op) {
 	case OP_10X:
 		//TODO
 	break;
-	case OP_SQ:
-		//TODO
-	break;
-	case OP_SQRT:
-		//TODO
-	break;
+	case OP_SQ: {
+		float x = mm57109_pop(mm);
+		mm57109_push(mm, x * x);
+	} break;
+	case OP_SQRT: {
+		float x = mm57109_pop(mm);
+		mm57109_push(mm, sqrt(x));
+	} break;
 	case OP_LN:
 		//TODO
 	break;
