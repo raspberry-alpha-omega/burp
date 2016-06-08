@@ -204,12 +204,14 @@ void mm57109_op(struct MM57109* mm, uint8_t op) {
 		mm->y = tmp;
 		mm->state = normal;
 	} break;
-	case OP_EX:
-		//TODO
-	break;
-	case OP_10X:
-		//TODO
-	break;
+	case OP_EX: {
+		float x = mm57109_pop(mm);
+		mm57109_push(mm, exp(x));
+	} break;
+	case OP_10X:{
+		float x = mm57109_pop(mm);
+		mm57109_push(mm, pow(10,x));
+	} break;
 	case OP_SQ: {
 		float x = mm57109_pop(mm);
 		mm57109_push(mm, x * x);
