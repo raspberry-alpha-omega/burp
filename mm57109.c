@@ -220,19 +220,23 @@ void mm57109_op(struct MM57109* mm, uint8_t op) {
 		float x = mm57109_pop(mm);
 		mm57109_push(mm, sqrt(x));
 	} break;
-	case OP_LN:
-		//TODO
-	break;
-	case OP_LOG:
-		//TODO
-	break;
+	case OP_LN: {
+		float x = mm57109_pop(mm);
+		mm57109_push(mm, log(x));
+	} break;
+	case OP_LOG: {
+		float x = mm57109_pop(mm);
+		mm57109_push(mm, log10(x));
+	} break;
 	case OP_1_X: {
 		float x = mm57109_pop(mm);
 		mm57109_push(mm, 1/x);
 	} break;
-	case OP_YX:
-		//TODO
-	break;
+	case OP_YX: {
+		float x = mm57109_pop(mm);
+		float y = mm57109_pop(mm);
+		mm57109_push(mm, pow(y,x));
+	} break;
 	case OP_PLUS:
 		if (mm->state == invert) {
 			float x = mm57109_pop(mm);
