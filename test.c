@@ -27,6 +27,16 @@ void _assert_state(struct MM57109* mm, enum MM57109_state state, int line) {
 }
 #define assert_state(mm,state) _assert_state(mm,state,__LINE__)
 
+void _assert_flag_set(int flag, int line) {
+    ck_assert_msg(flag, "line %d: expected flag set", line);
+}
+#define assert_flag_set(flag) _assert_flag_set(flag,__LINE__)
+
+void _assert_flag_clear(int flag, int line) {
+    ck_assert_msg(0==flag, "line %d: expected flag clear", line);
+}
+#define assert_flag_clear(flag) _assert_flag_clear(flag,__LINE__)
+
 void dump(struct MM57109* mm) {
 	printf("dump %p: x=%f, y=%f, z=%f, t=%f, m=%f\n", mm, mm->x.value, mm->y.value, mm->z.value, mm->t.value, mm->m.value);
 }
@@ -542,12 +552,24 @@ START_TEST(test_mclr)
     mm57109_op(&mm, OP_2);
     mm57109_op(&mm, OP_EN);
     mm57109_op(&mm, OP_1);
+    mm57109_set_flag(mm.flags.f1);
+    mm57109_set_flag(mm.flags.f2);
+    mm57109_set_flag(mm.flags.rw1);
+    mm57109_set_flag(mm.flags.rw2);
+    mm57109_set_flag(mm.flags.mode);
+    mm57109_set_flag(mm.flags.err);
 
     assert_register(&mm.x, 1);
     assert_register(&mm.y, 2);
     assert_register(&mm.z, 3);
     assert_register(&mm.t, 4);
     assert_register(&mm.m, 5);
+    assert_flag_set(mm.flags.f1);
+    assert_flag_set(mm.flags.f2);
+    assert_flag_set(mm.flags.rw1);
+    assert_flag_set(mm.flags.rw2);
+    assert_flag_set(mm.flags.mode);
+    assert_flag_set(mm.flags.err);
 
     mm57109_op(&mm, OP_MCLR);
     assert_register(&mm.x, 0);
@@ -555,6 +577,14 @@ START_TEST(test_mclr)
     assert_register(&mm.z, 0);
     assert_register(&mm.t, 0);
     assert_register(&mm.m, 0);
+    assert_flag_clear(mm.flags.f1);
+    assert_flag_clear(mm.flags.f2);
+    assert_flag_clear(mm.flags.rw1);
+    assert_flag_clear(mm.flags.rw2);
+    assert_flag_clear(mm.flags.mode);
+    assert_flag_clear(mm.flags.err);
+    assert_state(&mm, normal);
+
 }
 END_TEST
 

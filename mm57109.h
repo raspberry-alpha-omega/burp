@@ -18,7 +18,22 @@ struct MM57109 {
 	struct MM57109_register m;
 	enum MM57109_state state;
 	float dp;
+	union {
+		struct {
+			unsigned int f1 : 1;
+			unsigned int f2 : 1;
+			unsigned int rw1 : 1;
+			unsigned int rw2 : 1;
+			unsigned int mode : 1;
+			unsigned int err : 1;
+		} flags;
+		uint8_t flagbyte;
+	};
 };
+
+
+#define mm57109_set_flag(flag) { flag = 1; }
+#define mm57109_clear_flag(flag) { flag = 0; }
 
 // generic: NOP, HALT, MCLR, ECLR
 // digit entry: 0,1,2,3,4,5,6,7,8,9,DP,EE,CS,PI
