@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include "burp.h"
 
-
 int same_float(float a, float b) {
 	char float_a[32];
 	char float_b[32];
@@ -27,6 +26,10 @@ void _assert_state(struct MM57109* mm, enum MM57109_state state, int line) {
     ck_assert_msg(same_int(mm->state, state), "line %d: expected state %d but was %d", line, state, mm->state);
 }
 #define assert_state(mm,state) _assert_state(mm,state,__LINE__)
+
+void dump(struct MM57109* mm) {
+	printf("dump %p: x=%f, y=%f, z=%f, t=%f, m=%f\n", mm, mm->x.value, mm->y.value, mm->z.value, mm->t.value, mm->m.value);
+}
 
 START_TEST(test_single_digit)
 {
@@ -52,6 +55,21 @@ START_TEST(test_multiple_digit)
     mm57109_op(&mm, OP_2);
     assert_state(&mm, integer_entry);
     assert_register(&mm.x, 12);
+    assert_register(&mm.y, 0);
+}
+END_TEST
+
+START_TEST(test_leading_zero)
+{
+	struct MM57109 mm;
+	mm57109_init(&mm);
+
+	assert_state(&mm, normal);
+    mm57109_op(&mm, OP_0);
+    assert_state(&mm, integer_entry);
+    mm57109_op(&mm, OP_5);
+    assert_state(&mm, integer_entry);
+    assert_register(&mm.x, 5);
     assert_register(&mm.y, 0);
 }
 END_TEST
@@ -510,9 +528,40 @@ START_TEST(test_yx)
 }
 END_TEST
 
+START_TEST(test_mclr)
+{
+	struct MM57109 mm;
+	mm57109_init(&mm);
+
+    mm57109_op(&mm, OP_5);
+    mm57109_op(&mm, OP_XEM);
+    mm57109_op(&mm, OP_4);
+    mm57109_op(&mm, OP_EN);
+    mm57109_op(&mm, OP_3);
+    mm57109_op(&mm, OP_EN);
+    mm57109_op(&mm, OP_2);
+    mm57109_op(&mm, OP_EN);
+    mm57109_op(&mm, OP_1);
+
+    assert_register(&mm.x, 1);
+    assert_register(&mm.y, 2);
+    assert_register(&mm.z, 3);
+    assert_register(&mm.t, 4);
+    assert_register(&mm.m, 5);
+
+    mm57109_op(&mm, OP_MCLR);
+    assert_register(&mm.x, 0);
+    assert_register(&mm.y, 0);
+    assert_register(&mm.z, 0);
+    assert_register(&mm.t, 0);
+    assert_register(&mm.m, 0);
+}
+END_TEST
+
 void build_suite(TCase* tc) {
     tcase_add_test(tc, test_single_digit);
     tcase_add_test(tc, test_multiple_digit);
+    tcase_add_test(tc, test_leading_zero);
     tcase_add_test(tc, test_digits_and_enter);
     tcase_add_test(tc, test_digits_and_decimals);
     tcase_add_test(tc, test_pop);
@@ -538,6 +587,7 @@ void build_suite(TCase* tc) {
     tcase_add_test(tc, test_log);
     tcase_add_test(tc, test_ln);
     tcase_add_test(tc, test_yx);
+    tcase_add_test(tc, test_mclr);
 }
 
 int main(void)

@@ -194,7 +194,11 @@ void mm57109_op(struct MM57109* mm, uint8_t op) {
 		mm->state = normal;
 	break;
 	case OP_MCLR:
-		//TODO
+		mm57109_set_register(&mm->x, 0);
+		mm57109_set_register(&mm->y, 0);
+		mm57109_set_register(&mm->z, 0);
+		mm57109_set_register(&mm->t, 0);
+		mm57109_set_register(&mm->m, 0);
 	break;
 
 	case OP_XEY:{
