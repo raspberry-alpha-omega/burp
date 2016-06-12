@@ -11,6 +11,7 @@ struct MM57109_register {
 enum MM57109_state { normal, integer_entry, decimal_entry, exponent_entry, invert };
 
 struct MM57109 {
+	uint8_t* ram;
 	struct MM57109_register x;
 	struct MM57109_register y;
 	struct MM57109_register z;
@@ -18,6 +19,7 @@ struct MM57109 {
 	struct MM57109_register m;
 	enum MM57109_state state;
 	float dp;
+	uint8_t pc;
 	union {
 		struct {
 			unsigned int f1 : 1;
@@ -135,9 +137,10 @@ struct MM57109 {
 #define OP_PRW2  0b111110
 #define OP_NOP   0b111111
 
-void mm57109_init(struct MM57109* mm);
+void mm57109_init(struct MM57109* mm, uint8_t* ram);
 void mm57109_set_register(struct MM57109_register* reg, float value);
 float mm57109_get_register(struct MM57109_register* reg);
+void tick(struct MM57109* mm);
 
 void mm57109_op(struct MM57109* mm, uint8_t op);
 

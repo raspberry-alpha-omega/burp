@@ -2,7 +2,8 @@
 
 #include "mm57109.h"
 
-void mm57109_init(struct MM57109* mm) {
+void mm57109_init(struct MM57109* mm, uint8_t* ram) {
+	mm->ram = ram;
 	mm->state = normal;
 	mm57109_set_register(&mm->x, 0);
 	mm57109_set_register(&mm->y, 0);
@@ -17,6 +18,10 @@ void mm57109_set_register(struct MM57109_register* reg, float value) {
 
 float mm57109_get_register(struct MM57109_register* reg) {
 	return reg->value;
+}
+
+void set_pc(struct MM57109* mm, uint8_t addr) {
+	mm->pc = addr;
 }
 
 void mm57109_push(struct MM57109* mm, float value) {

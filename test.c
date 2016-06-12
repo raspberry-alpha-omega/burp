@@ -41,10 +41,12 @@ void dump(struct MM57109* mm) {
 	printf("dump %p: x=%f, y=%f, z=%f, t=%f, m=%f\n", mm, mm->x.value, mm->y.value, mm->z.value, mm->t.value, mm->m.value);
 }
 
+uint8_t mm_ram[256];
+
 START_TEST(test_single_digit)
 {
 	struct MM57109 mm;
-	mm57109_init(&mm);
+	mm57109_init(&mm, mm_ram);
 
     assert_state(&mm, normal);
     mm57109_op(&mm, OP_1);
@@ -57,7 +59,7 @@ END_TEST
 START_TEST(test_multiple_digit)
 {
 	struct MM57109 mm;
-	mm57109_init(&mm);
+	mm57109_init(&mm, mm_ram);
 
 	assert_state(&mm, normal);
     mm57109_op(&mm, OP_1);
@@ -72,7 +74,7 @@ END_TEST
 START_TEST(test_leading_zero)
 {
 	struct MM57109 mm;
-	mm57109_init(&mm);
+	mm57109_init(&mm, mm_ram);
 
 	assert_state(&mm, normal);
     mm57109_op(&mm, OP_0);
@@ -87,7 +89,7 @@ END_TEST
 START_TEST(test_digits_and_enter)
 {
 	struct MM57109 mm;
-	mm57109_init(&mm);
+	mm57109_init(&mm, mm_ram);
 
 	assert_state(&mm, normal);
     mm57109_op(&mm, OP_1);
@@ -102,7 +104,7 @@ END_TEST
 START_TEST(test_digits_and_decimals)
 {
 	struct MM57109 mm;
-	mm57109_init(&mm);
+	mm57109_init(&mm, mm_ram);
 
 	assert_state(&mm, normal);
     mm57109_op(&mm, OP_1);
@@ -118,7 +120,7 @@ END_TEST
 START_TEST(test_pop)
 {
 	struct MM57109 mm;
-	mm57109_init(&mm);
+	mm57109_init(&mm, mm_ram);
 
     mm57109_op(&mm, OP_1);
     mm57109_op(&mm, OP_EN);
@@ -143,7 +145,7 @@ END_TEST
 START_TEST(test_roll)
 {
 	struct MM57109 mm;
-	mm57109_init(&mm);
+	mm57109_init(&mm, mm_ram);
 
     mm57109_op(&mm, OP_1);
     mm57109_op(&mm, OP_EN);
@@ -168,7 +170,7 @@ END_TEST
 START_TEST(test_xey)
 {
 	struct MM57109 mm;
-	mm57109_init(&mm);
+	mm57109_init(&mm, mm_ram);
 
     mm57109_op(&mm, OP_1);
     assert_register(&mm.x, 1);
@@ -187,7 +189,7 @@ END_TEST
 START_TEST(test_xem)
 {
 	struct MM57109 mm;
-	mm57109_init(&mm);
+	mm57109_init(&mm, mm_ram);
 
     mm57109_op(&mm, OP_1);
     assert_register(&mm.x, 1);
@@ -206,7 +208,7 @@ END_TEST
 START_TEST(test_ms)
 {
 	struct MM57109 mm;
-	mm57109_init(&mm);
+	mm57109_init(&mm, mm_ram);
 
     mm57109_op(&mm, OP_1);
     assert_register(&mm.x, 1);
@@ -221,7 +223,7 @@ END_TEST
 START_TEST(test_mr)
 {
 	struct MM57109 mm;
-	mm57109_init(&mm);
+	mm57109_init(&mm, mm_ram);
 
     mm57109_op(&mm, OP_1);
     mm57109_op(&mm, OP_EN);
@@ -249,7 +251,7 @@ END_TEST
 START_TEST(test_plus)
 {
 	struct MM57109 mm;
-	mm57109_init(&mm);
+	mm57109_init(&mm, mm_ram);
 
     mm57109_op(&mm, OP_1);
     mm57109_op(&mm, OP_EN);
@@ -278,7 +280,7 @@ END_TEST
 START_TEST(test_minus)
 {
 	struct MM57109 mm;
-	mm57109_init(&mm);
+	mm57109_init(&mm, mm_ram);
 
     mm57109_op(&mm, OP_1);
     mm57109_op(&mm, OP_EN);
@@ -307,7 +309,7 @@ END_TEST
 START_TEST(test_mul)
 {
 	struct MM57109 mm;
-	mm57109_init(&mm);
+	mm57109_init(&mm, mm_ram);
 
     mm57109_op(&mm, OP_1);
     mm57109_op(&mm, OP_EN);
@@ -336,7 +338,7 @@ END_TEST
 START_TEST(test_div)
 {
 	struct MM57109 mm;
-	mm57109_init(&mm);
+	mm57109_init(&mm, mm_ram);
 
     mm57109_op(&mm, OP_1);
     mm57109_op(&mm, OP_EN);
@@ -365,7 +367,7 @@ END_TEST
 START_TEST(test_inv)
 {
 	struct MM57109 mm;
-	mm57109_init(&mm);
+	mm57109_init(&mm, mm_ram);
 
 	assert_state(&mm, normal);
     mm57109_op(&mm, OP_INV);
@@ -378,7 +380,7 @@ END_TEST
 START_TEST(test_inv_plus)
 {
 	struct MM57109 mm;
-	mm57109_init(&mm);
+	mm57109_init(&mm, mm_ram);
 
     mm57109_op(&mm, OP_1);
     mm57109_op(&mm, OP_MS);
@@ -392,7 +394,7 @@ END_TEST
 START_TEST(test_inv_minus)
 {
 	struct MM57109 mm;
-	mm57109_init(&mm);
+	mm57109_init(&mm, mm_ram);
 
     mm57109_op(&mm, OP_7);
     mm57109_op(&mm, OP_MS);
@@ -408,7 +410,7 @@ END_TEST
 START_TEST(test_inv_mul)
 {
 	struct MM57109 mm;
-	mm57109_init(&mm);
+	mm57109_init(&mm, mm_ram);
 
     mm57109_op(&mm, OP_7);
     mm57109_op(&mm, OP_MS);
@@ -424,7 +426,7 @@ END_TEST
 START_TEST(test_inv_div)
 {
 	struct MM57109 mm;
-	mm57109_init(&mm);
+	mm57109_init(&mm, mm_ram);
 
     mm57109_op(&mm, OP_7);
     mm57109_op(&mm, OP_MS);
@@ -440,7 +442,7 @@ END_TEST
 START_TEST(test_1_x)
 {
 	struct MM57109 mm;
-	mm57109_init(&mm);
+	mm57109_init(&mm, mm_ram);
 
     mm57109_op(&mm, OP_2);
     mm57109_op(&mm, OP_1_X);
@@ -451,7 +453,7 @@ END_TEST
 START_TEST(test_sq)
 {
 	struct MM57109 mm;
-	mm57109_init(&mm);
+	mm57109_init(&mm, mm_ram);
 
     mm57109_op(&mm, OP_2);
     mm57109_op(&mm, OP_SQ);
@@ -462,7 +464,7 @@ END_TEST
 START_TEST(test_sqrt)
 {
 	struct MM57109 mm;
-	mm57109_init(&mm);
+	mm57109_init(&mm, mm_ram);
 
     mm57109_op(&mm, OP_9);
     mm57109_op(&mm, OP_SQRT);
@@ -473,7 +475,7 @@ END_TEST
 START_TEST(test_tenx)
 {
 	struct MM57109 mm;
-	mm57109_init(&mm);
+	mm57109_init(&mm, mm_ram);
 
     mm57109_op(&mm, OP_3);
     mm57109_op(&mm, OP_10X);
@@ -484,7 +486,7 @@ END_TEST
 START_TEST(test_ex)
 {
 	struct MM57109 mm;
-	mm57109_init(&mm);
+	mm57109_init(&mm, mm_ram);
 
     mm57109_op(&mm, OP_3);
     mm57109_op(&mm, OP_EX);
@@ -495,7 +497,7 @@ END_TEST
 START_TEST(test_log)
 {
 	struct MM57109 mm;
-	mm57109_init(&mm);
+	mm57109_init(&mm, mm_ram);
 
     mm57109_op(&mm, OP_1);
     mm57109_op(&mm, OP_0);
@@ -509,7 +511,7 @@ END_TEST
 START_TEST(test_ln)
 {
 	struct MM57109 mm;
-	mm57109_init(&mm);
+	mm57109_init(&mm, mm_ram);
 
     mm57109_op(&mm, OP_2);
     mm57109_op(&mm, OP_0);
@@ -528,7 +530,7 @@ END_TEST
 START_TEST(test_yx)
 {
 	struct MM57109 mm;
-	mm57109_init(&mm);
+	mm57109_init(&mm, mm_ram);
 
     mm57109_op(&mm, OP_3);
     mm57109_op(&mm, OP_EN);
@@ -541,7 +543,7 @@ END_TEST
 START_TEST(test_mclr)
 {
 	struct MM57109 mm;
-	mm57109_init(&mm);
+	mm57109_init(&mm, mm_ram);
 
     mm57109_op(&mm, OP_5);
     mm57109_op(&mm, OP_XEM);
