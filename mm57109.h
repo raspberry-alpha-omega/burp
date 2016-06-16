@@ -10,7 +10,10 @@ struct MM57109_register {
 	double value;
 };
 
-enum MM57109_state { normal, integer_entry, decimal_entry, exponent_entry, invert };
+enum MM57109_state {
+	normal, integer_entry, decimal_entry, exponent_entry,
+	invert, two
+};
 
 struct MM57109 {
 	uint8_t* ram;
@@ -20,6 +23,7 @@ struct MM57109 {
 	struct MM57109_register t;
 	struct MM57109_register m;
 	enum MM57109_state state;
+	uint8_t prev;
 	float dp;
 	uint8_t pc;
 	union {

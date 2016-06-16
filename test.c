@@ -37,11 +37,16 @@ void _assert_flag_clear(int flag, int line) {
 }
 #define assert_flag_clear(flag) _assert_flag_clear(flag,__LINE__)
 
+void _assert_pc(struct MM57109* mm, uint8_t value, int line) {
+    ck_assert_msg(same_int(mm->pc, value), "line %d: expected pc %d but was %d", line, value, mm->pc);
+}
+#define assert_pc(mm,value) _assert_pc(mm,value,__LINE__)
+
 void dump(struct MM57109* mm) {
 	printf("dump %p: x=%f, y=%f, z=%f, t=%f, m=%f\n", mm, mm->x.value, mm->y.value, mm->z.value, mm->t.value, mm->m.value);
 }
 
-uint8_t mm_ram[256];
+uint8_t mm_ram[MM_RAM_SIZE];
 
 START_TEST(test_single_digit)
 {
@@ -590,6 +595,19 @@ START_TEST(test_mclr)
 }
 END_TEST
 
+START_TEST(test_jmp)
+{
+	struct MM57109 mm;
+	mm57109_init(&mm, mm_ram);
+
+    assert_pc(&mm, 0);
+    mm57109_op(&mm, OP_JMP);
+    mm57109_op(&mm, 0x23);
+    assert_pc(&mm, 0x23);
+}
+END_TEST
+
+
 void build_suite(TCase* tc) {
     tcase_add_test(tc, test_single_digit);
     tcase_add_test(tc, test_multiple_digit);
@@ -620,6 +638,8 @@ void build_suite(TCase* tc) {
     tcase_add_test(tc, test_ln);
     tcase_add_test(tc, test_yx);
     tcase_add_test(tc, test_mclr);
+
+    tcase_add_test(tc, test_jmp);
 }
 
 int main(void)

@@ -1,4 +1,5 @@
 #include <math.h>
+#include <stdio.h> //TODO remove after testing
 
 #include "mm57109.h"
 
@@ -41,7 +42,25 @@ float mm57109_pop(struct MM57109* mm) {
 	return ret;
 }
 
+int is_two(uint8_t op) {
+	switch (op) {
+	case OP_SMDC: case OP_IN: case OP_OUT:
+	case OP_JMP: case OP_TJC: case OP_TERR: case OP_TX0: case OP_TXF: case OP_TXLT0: case OP_IBNZ: case OP_DBNZ:
+		return 1;
+	default: return 0;
+	}
+}
+
 void mm57109_op(struct MM57109* mm, uint8_t op) {
+	uint8_t arg = op;
+	if (mm->state == two) {
+		op = mm->prev;
+	} else if (is_two(op)) {
+		mm->prev = op;
+		mm->state = two;
+		return;
+	}
+
 	switch(op) {
 
 	case OP_0: case OP_1: case OP_2: case OP_3: case OP_4: case OP_5: case OP_6: case OP_7: case OP_8: case OP_9:
@@ -104,7 +123,8 @@ void mm57109_op(struct MM57109* mm, uint8_t op) {
 		//TODO
 	break;
 	case OP_JMP:
-		//TODO
+		mm->pc = arg;
+		mm->state = normal;
 	break;
 	case OP_OUT:
 		//TODO
