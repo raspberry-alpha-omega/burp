@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#define MM_RAM_SIZE 64
+
 /* use native types for now, implement wacky MM57109 BCD later */
 struct MM57109_register {
 	double value;

@@ -10,6 +10,7 @@ void mm57109_init(struct MM57109* mm, uint8_t* ram) {
 	mm57109_set_register(&mm->t, 0);
 	mm57109_set_register(&mm->m, 0);
 	mm->dp = 1;
+	mm->pc = 0;
 }
 
 void mm57109_set_register(struct MM57109_register* reg, float value) {
